@@ -1,0 +1,13 @@
+{
+  "name": "WorkFlow Pro",
+  "description": "High-performance B2B SaaS Project Management Platform optimized for Vercel deployment.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "deployment": {
+    "provider": "vercel",
+    "framework": "vite",
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist"
+  }
+}
