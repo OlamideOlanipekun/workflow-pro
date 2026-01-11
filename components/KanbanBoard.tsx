@@ -1,8 +1,8 @@
 
 import React, { useState, useMemo } from 'react';
-import { Task, TaskStatus, TaskPriority } from '../types';
-import { mockTasks, mockUsers } from '../services/mockData';
-import TaskDetail from './TaskDetail';
+import { Task, TaskStatus, TaskPriority } from '../types.ts';
+import { mockTasks, mockUsers } from '../services/mockData.ts';
+import TaskDetail from './TaskDetail.tsx';
 
 const getPriorityColor = (priority: TaskPriority) => {
   switch (priority) {
@@ -49,8 +49,6 @@ const TaskCard: React.FC<{ task: Task; onClick: () => void }> = ({ task, onClick
 const KanbanBoard: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>(mockTasks);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-  
-  // Filter states
   const [filterPriority, setFilterPriority] = useState<string>('All');
   const [filterAssignee, setFilterAssignee] = useState<string>('All');
 
@@ -75,73 +73,44 @@ const KanbanBoard: React.FC = () => {
   };
 
   return (
-    <div className="h-full animate-in fade-in duration-700">
+    <div className="h-full">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-8 gap-4">
         <div>
           <h2 className="text-3xl font-black text-slate-900 tracking-tight">Project Board</h2>
-          <p className="text-slate-500 font-medium">Visualizing task lifecycle and bottlenecks</p>
+          <p className="text-slate-500 font-medium">Visualizing task lifecycle</p>
         </div>
         
         <div className="flex flex-wrap items-center gap-3">
-          {/* Priority Filter */}
-          <div className="flex items-center gap-2 bg-white px-3 py-2 rounded-2xl border border-slate-100 shadow-sm">
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Priority:</span>
-            <select 
-              value={filterPriority}
-              onChange={(e) => setFilterPriority(e.target.value)}
-              className="text-xs font-extrabold text-slate-700 border-none bg-transparent p-0 pr-6 focus:ring-0 cursor-pointer"
-            >
-              <option value="All">All Levels</option>
-              {Object.values(TaskPriority).map(p => <option key={p} value={p}>{p}</option>)}
-            </select>
-          </div>
-
-          {/* Assignee Filter */}
-          <div className="flex items-center gap-2 bg-white px-3 py-2 rounded-2xl border border-slate-100 shadow-sm">
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Owner:</span>
-            <select 
-              value={filterAssignee}
-              onChange={(e) => setFilterAssignee(e.target.value)}
-              className="text-xs font-extrabold text-slate-700 border-none bg-transparent p-0 pr-6 focus:ring-0 cursor-pointer"
-            >
-              <option value="All">Everyone</option>
-              {mockUsers.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
-            </select>
-          </div>
-
-          <div className="w-[1px] h-8 bg-slate-200 mx-1"></div>
-
-          <button className="bg-indigo-600 text-white px-5 py-2.5 rounded-2xl text-xs font-black hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 flex items-center gap-2 active:scale-95">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
-            </svg>
-            Task
-          </button>
+          <select 
+            value={filterPriority}
+            onChange={(e) => setFilterPriority(e.target.value)}
+            className="text-xs font-extrabold text-slate-700 bg-white border border-slate-100 rounded-xl px-3 py-2"
+          >
+            <option value="All">All Priorities</option>
+            {Object.values(TaskPriority).map(p => <option key={p} value={p}>{p}</option>)}
+          </select>
+          <select 
+            value={filterAssignee}
+            onChange={(e) => setFilterAssignee(e.target.value)}
+            className="text-xs font-extrabold text-slate-700 bg-white border border-slate-100 rounded-xl px-3 py-2"
+          >
+            <option value="All">Everyone</option>
+            {mockUsers.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+          </select>
+          <button className="bg-indigo-600 text-white px-5 py-2.5 rounded-2xl text-xs font-black shadow-lg">New Task</button>
         </div>
       </div>
 
       <div className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide h-[calc(100vh-280px)]">
         {columns.map((status) => (
           <div key={status} className="flex-shrink-0 w-80 flex flex-col bg-slate-50/50 rounded-[32px] p-5 border border-slate-100/50">
-            <div className="flex items-center justify-between mb-6 px-2">
-              <div className="flex items-center gap-3">
-                <h3 className="font-black text-slate-900 text-sm tracking-tight uppercase">{status}</h3>
-                <span className="bg-white text-indigo-600 px-2.5 py-1 rounded-xl text-[10px] font-black shadow-sm border border-slate-100">
-                  {filteredTasks.filter(t => t.status === status).length}
-                </span>
-              </div>
-            </div>
-            <div className="flex-1 space-y-4 overflow-y-auto scrollbar-hide pr-1">
+            <h3 className="font-black text-slate-900 text-sm tracking-tight uppercase mb-6 px-2">{status}</h3>
+            <div className="flex-1 space-y-4 overflow-y-auto scrollbar-hide">
               {filteredTasks
                 .filter(t => t.status === status)
                 .map(task => (
                   <TaskCard key={task.id} task={task} onClick={() => setSelectedTask(task)} />
                 ))}
-              {filteredTasks.filter(t => t.status === status).length === 0 && (
-                <div className="py-12 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[24px]">
-                  <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Empty Lane</p>
-                </div>
-              )}
             </div>
           </div>
         ))}

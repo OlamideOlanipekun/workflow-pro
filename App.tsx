@@ -1,11 +1,11 @@
 
 import React, { useState } from 'react';
-import Sidebar from './components/Sidebar';
-import Dashboard from './components/Dashboard';
-import KanbanBoard from './components/KanbanBoard';
-import ProjectsList from './components/ProjectsList';
-import LandingPage from './components/LandingPage';
-import { currentUser } from './services/mockData';
+import Sidebar from './components/Sidebar.tsx';
+import Dashboard from './components/Dashboard.tsx';
+import KanbanBoard from './components/KanbanBoard.tsx';
+import ProjectsList from './components/ProjectsList.tsx';
+import LandingPage from './components/LandingPage.tsx';
+import { currentUser } from './services/mockData.ts';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -46,12 +46,10 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#fcfdfe] flex flex-col md:flex-row overflow-hidden">
-      {/* Sidebar - Desktop */}
       <div className="hidden md:block">
         <Sidebar currentView={currentView} setView={handleSetView} />
       </div>
 
-      {/* Sidebar - Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-[60] md:hidden">
           <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} />
@@ -65,40 +63,28 @@ const App: React.FC = () => {
         <div className="sticky top-0 z-30">
           <header className="glass border-b border-slate-200/50 p-4 md:p-6 px-4 md:px-10 flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <button 
-                onClick={() => setMobileMenuOpen(true)}
-                className="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
-              >
+              <button onClick={() => setMobileMenuOpen(true)} className="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-xl">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" /></svg>
               </button>
               <div className="relative w-40 sm:w-80 group">
-                <input
-                  type="text"
-                  className="block w-full pl-10 pr-4 py-2 border border-slate-100 rounded-2xl bg-slate-50 focus:bg-white text-xs md:text-sm transition-all"
-                  placeholder="Search workspace..."
-                />
-                <svg className="h-4 w-4 absolute left-3 top-2.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
+                <input type="text" className="block w-full pl-10 pr-4 py-2 border border-slate-100 rounded-2xl bg-slate-50 focus:bg-white text-xs md:text-sm" placeholder="Search workspace..." />
+                <svg className="h-4 w-4 absolute left-3 top-2.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
               </div>
             </div>
-
-            <div className="flex items-center gap-4 group cursor-pointer">
+            <div className="flex items-center gap-4 cursor-pointer">
               <img src={currentUser.avatar} className="w-10 h-10 rounded-xl border-2 border-white shadow-md" alt="Profile" />
             </div>
           </header>
-
-          <div className="px-4 md:px-12 py-3 bg-white/70 backdrop-blur-md border-b border-slate-100 flex items-center justify-between overflow-x-auto scrollbar-hide">
+          <div className="px-4 md:px-12 py-3 bg-white/70 backdrop-blur-md border-b border-slate-100 overflow-x-auto scrollbar-hide">
               <div className="flex items-center gap-6 whitespace-nowrap">
                   {['General', 'Files', 'Team', 'Settings', 'API'].map((item) => (
-                      <button key={item} className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-indigo-600 transition-colors">
+                      <button key={item} className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-indigo-600">
                           {item}
                       </button>
                   ))}
               </div>
           </div>
         </div>
-
         <div className="p-4 md:p-10 md:px-12 max-w-[1600px] mx-auto pb-24">
           {renderView()}
         </div>
